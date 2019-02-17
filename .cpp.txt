@@ -1,0 +1,356 @@
+#include<stdio.h>
+#include<iostream>
+#include<stdlib.h>
+#include<math.h>
+#include<string.h>
+#include<conio.h>
+#include<malloc.h>
+#include<windows.h>
+using namespace std;
+// function define
+void rac(int x,int y,int l,int b);
+void win(void);
+void lebel(void);
+int control(void);
+void exit(void);
+void sear(void);
+void inser(void);
+void dele(void);
+void wrong(void);
+void print();
+void del(string);
+int sea(string);
+//structure define
+struct node
+{
+    char s[20];
+    struct node* next;
+
+}*head=NULL;
+//gotoxy function for change position
+COORD coord={0,0};
+ void gotoxy(int x,int y)
+ {
+   coord.X=x;
+ coord.Y=y;
+ SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),coord);
+ }
+ //function for rectangle
+ void rac(int x,int y,int l,int b)
+ {
+     gotoxy(x,y-1);
+     for(int i=1;i<l;i++)
+        cout<<"_";
+
+     gotoxy(x,y);
+     for(int i=0;i<b;i++)
+     {
+         cout<<"|";
+         gotoxy(x,y+i);
+     }
+      gotoxy(x+l-1,y);
+     for(int i=1;i<b;i++)
+     {
+         cout<<"|";
+         gotoxy(x+l-1,y+i);
+     }
+     gotoxy(x+1,y+b-2);
+     for(int i=2;i<l;i++)
+        cout<<"_";
+ }
+ //function for horizontal line
+ void hori(int x,int y,int l)
+ {
+     gotoxy(x,y);
+     for(int i=0;i<l;i++)
+        cout<<"_";
+ }
+ // function for login
+/* bool login()
+ {
+     rac(15,5,50,7);
+     hori(16,7,48);
+     gotoxy(35,6);
+     cout<<"*LOGIN*";
+     gotoxy(17,9);
+     cout<<"DICTONARY ID:";
+     string s="dictonary@123";
+     string in;
+     cin>>in;
+     if(s==in)
+        return 1;
+     else
+     {
+         return 0;
+     }
+}*/
+// main function
+int main()
+{
+    while(1){
+            int p=5;
+    system("cls");
+    win();
+    lebel();
+    p=control();
+    if(p==1)
+        break;
+    }
+    system("cls");
+    return 0;
+}
+// function to make window
+void win()
+{
+    system("cls");
+    rac(5,2,60,15);
+    hori(6,5,58);
+    hori(6,8,58);
+    hori(6,11,58);
+    gotoxy(1,23);
+}
+//function to write in side th window
+
+void lebel()
+{
+    gotoxy(25,3);
+    cout<<"*--DICTIONARY--*";
+    gotoxy(7,7);
+    cout<<"1.  SEARCH:";
+    gotoxy(7,10);
+    cout<<"2.  INSERT:";
+    gotoxy(7,13);
+    cout<<"3.  DELETE:";
+    gotoxy(7,16);
+    cout<<"ENTER 0 for EXIT";
+    gotoxy(38,16);
+    cout<<"ENTER 9 for SEE ALL DATA";
+    gotoxy(1,20);
+}
+// select setting
+int control()
+{
+    gotoxy(25,18);
+    cout<<"ENTER ANY ONE KEY::";
+    string c;
+    cin>>c;
+    if(c=="0")
+       {
+        exit();
+        return 1;
+       }
+    else if(c=="1")
+       {
+       sear();
+       return 5;
+       }
+    else if(c=="2")
+       {
+       inser();
+       return 5;
+       }
+    else if(c=="3")
+        {
+            dele();
+            return 5;
+        }
+    else if(c=="9")
+        {
+            print();
+            return 5;
+        }
+    else
+       {
+        wrong();
+        return 5;
+       }
+return 5;
+}
+//function to exit program
+void exit()
+{
+    system("cls");
+  rac(15,5,50,7);
+  gotoxy(35,8);
+  cout<<"THANK YOU";
+  Sleep(500);
+  system("cls");
+}
+// function for delete only
+void del(char x[]) {
+    struct node *iter,*p=NULL,*q=head;
+    iter = head;
+    if (strcmp(iter->s,x)==0) {
+        free(head);
+            head = iter->next;
+        return;
+    }
+    while (iter!= NULL) {
+        if (strcmp(iter->s,x)==0)
+              break;
+        p=iter;
+        iter = iter->next;
+    }
+    p->next=iter->next;
+    free(iter);
+    return;
+}
+// function for search only
+int sea(char p[])
+{
+   int i=0;
+    struct node *temp=head;
+    while(temp!=NULL)
+    {
+        i++;
+        if(strcmp(temp->s,p)==0)
+            {
+                return i;
+            }
+        temp=temp->next;
+    }
+    return 0;
+}
+//function for insertion
+void inser()
+{
+    gotoxy(42,9);
+    cout<<"ENTER DATA";
+    gotoxy(44,10);
+    struct node *temp=(struct node*)malloc(sizeof(node));
+    struct node *pp=head;
+    scanf("%s",&(temp->s));
+    temp->next=NULL;
+    if(head==NULL)
+      {
+        head=temp;
+      }
+    else
+    {
+       while(pp->next!=NULL)
+       {
+           pp=pp->next;
+       }
+       pp->next=temp;
+    }
+    gotoxy(42,9);
+    cout<<"                ";
+    gotoxy(44,10);
+   cout<<"                ";
+   gotoxy(42,9);
+  cout<<"DATA INSERTED";
+  Sleep(400);
+  gotoxy(42,10);
+  cout<<"              ";
+  return;
+}
+//delete function
+void dele()
+{
+    gotoxy(42,13);
+    cout<<"ENTER DATA";
+    gotoxy(43,14);
+    char s[30];
+    scanf("%s",&s);
+    int p=sea(s);
+    if(p==0)
+    {
+    gotoxy(42,13);
+    cout<<"                ";
+    gotoxy(43,14);
+   cout<<"                ";
+   gotoxy(42,13);
+  cout<<"DATA NOT FOUND";
+  Sleep(500);
+  gotoxy(42,10);
+  cout<<"              ";
+  return;
+    }
+    else
+    {
+    gotoxy(42,13);
+    cout<<"                ";
+    gotoxy(43,14);
+   cout<<"                ";
+   gotoxy(42,14);
+  cout<<"DATA DELETED";
+  Sleep(500);
+  gotoxy(42,10);
+  cout<<"              ";
+  del(s);
+}
+}
+void wrong()
+{
+    system("cls");
+  rac(15,5,50,7);
+  gotoxy(35,8);
+  cout<<"WRONG INPUT";
+  Sleep(500);
+  system("cls");
+}
+void print()
+{
+  loop:
+   system("cls");
+   rac(5,2,60,15);
+    hori(6,5,58);
+    gotoxy(25,3);
+    cout<<"*--DICYONARY--*";
+    int i=1.;
+    struct node *temp=head;
+    while(temp!=NULL)
+    {
+        gotoxy(6,6+i);
+        printf("%d. %s",i,temp->s);
+        temp=temp->next;
+        i++;
+    }
+    gotoxy(25,18);
+    cout<<"ENTER 0 FOR CONTINUE::";
+    int a;
+    cin>>a;
+    if(a==0)
+        return;
+    goto loop;
+}
+void sear()
+{
+    gotoxy(42,6);
+    cout<<"ENTER DATA";
+    gotoxy(43,7);
+    char s[30];
+    scanf("%s",&s);
+    int p=sea(s);
+    if(p==0)
+    {
+    gotoxy(42,6);
+    cout<<"                ";
+    gotoxy(43,7);
+   cout<<"                ";
+   gotoxy(42,6);
+  cout<<"DATA NOT FOUND";
+  Sleep(500);
+  gotoxy(42,6);
+  cout<<"              ";
+  return;
+    }
+    else
+    {
+    gotoxy(42,6);
+    cout<<"                ";
+    gotoxy(43,7);
+   cout<<"                ";
+   gotoxy(42,6);
+  cout<<"DATA AVAILABLE AT ";
+  gotoxy(42,7);
+  cout<<"NODE "<<p;
+  Sleep(800);
+  gotoxy(42,6);
+  cout<<"              ";
+  gotoxy(42,7);
+  cout<<"              ";
+}
+}
+
+
